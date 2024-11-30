@@ -17,6 +17,10 @@ namespace ControleEstroqueV._3.Classes
         public string Produto { get; set; }
         public int Quantidade { get; set; }
         public float Total { get; set; }
+        public object[] Linha()
+        {
+            return new object[] { Id, DataC, Produto, Quantidade, Total};
+        }
 
         public CompraC()
         {

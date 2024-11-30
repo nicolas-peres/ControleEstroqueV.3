@@ -102,7 +102,14 @@
     <Compile Include="Classes\LoginC.cs" />
     <Compile Include="Classes\ProdutoC.cs" />
     <Compile Include="Classes\UsuarioC.cs" />
+    <Compile Include="Dao\CompraDao.cs" />
     <Compile Include="Dao\ProdutoDao.cs" />
+    <Compile Include="Formularios\Comprado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Comprado.Designer.cs">
+      <DependentUpon>Comprado.cs</DependentUpon>
+    </Compile>
     <Compile Include="Principal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,16 +128,16 @@
     <Compile Include="Formularios\Editar\FrmEditarUsuario.Designer.cs">
       <DependentUpon>FrmEditarUsuario.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\FrmCadastrarProduto.cs">
+    <Compile Include="Formularios\Cadastrar\FrmCadastrarProduto.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FrmCadastrarProduto.Designer.cs">
+    <Compile Include="Formularios\Cadastrar\FrmCadastrarProduto.Designer.cs">
       <DependentUpon>FrmCadastrarProduto.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\FrmCadastrarUsuario.cs">
+    <Compile Include="Formularios\Cadastrar\FrmCadastrarUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\FrmCadastrarUsuario.Designer.cs">
+    <Compile Include="Formularios\Cadastrar\FrmCadastrarUsuario.Designer.cs">
       <DependentUpon>FrmCadastrarUsuario.cs</DependentUpon>
     </Compile>
     <Compile Include="Formularios\FrmCompra.cs">
@@ -153,6 +160,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Formularios\Comprado.resx">
+      <DependentUpon>Comprado.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Principal.resx">
       <DependentUpon>Principal.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,10 +172,10 @@
     <EmbeddedResource Include="Formularios\Editar\FrmEditarUsuario.resx">
       <DependentUpon>FrmEditarUsuario.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\FrmCadastrarProduto.resx">
+    <EmbeddedResource Include="Formularios\Cadastrar\FrmCadastrarProduto.resx">
       <DependentUpon>FrmCadastrarProduto.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\FrmCadastrarUsuario.resx">
+    <EmbeddedResource Include="Formularios\Cadastrar\FrmCadastrarUsuario.resx">
       <DependentUpon>FrmCadastrarUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\FrmCompra.resx">

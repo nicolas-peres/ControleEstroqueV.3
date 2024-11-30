@@ -5,24 +5,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ControleEstroqueV._3.Classes;
+using ControleEstroqueV._3.Formularios;
 using MySql.Data.MySqlClient;
 
 namespace ControleEstroqueV._3.Dao
 {
-    public class ProdutoDao
+    public class CompraDao
     {
         private string LinhaConexao = "Server=localhost;Database=controleestoque;User Id=root;Password=";
         private MySqlConnection Conexao;
-        public ProdutoDao()
+
+        public CompraDao()
         {
             Conexao = new MySqlConnection(LinhaConexao);
         }
 
+        // Método para preencher ComboBox com produtos disponíveis
         public DataTable PreencherComboBox()
         {
             DataTable dataTable = new DataTable();
 
-            string query = "SELECT Id, Nome FROM Produto";
+            string query = "SELECT Id, Nome FROM Produtos";
 
             using (MySqlConnection connection = new MySqlConnection(LinhaConexao))
             {
@@ -42,16 +45,18 @@ namespace ControleEstroqueV._3.Dao
 
             return dataTable;
         }
-        public DataTable ObterProdutos()
+
+        // Método para obter todas as compras realizadas
+        public DataTable ObterCompras()
         {
             DataTable dt = new DataTable();
             Conexao.Open();
-            string query = "SELECT Id, Nome, Descricao, Preco FROM produto Order by Id desc";
+            string query = "SELECT Id, Data, Produto, Quantidade, Subtotal FROM Compras ORDER BY Id DESC";
             MySqlCommand comando = new MySqlCommand(query, Conexao);
 
             MySqlDataReader Leitura = comando.ExecuteReader();
 
-            foreach (var atributos in typeof(ProdutoC).GetProperties())
+            foreach (var atributos in typeof(CompraC).GetProperties())
             {
                 dt.Columns.Add(atributos.Name);
             }
@@ -60,17 +65,19 @@ namespace ControleEstroqueV._3.Dao
             {
                 while (Leitura.Read())
                 {
-                    ProdutoC p = new ProdutoC();
-                    p.Id = Convert.ToInt32(Leitura[0]);
-                    p.Nome = Leitura[1].ToString();
-                    p.Descricao = Leitura[2].ToString();
-                    p.Preco = Leitura[3].ToString();
-                    dt.Rows.Add(p.Linha());
+                    CompraC c = new CompraC();
+                    c.Id = Convert.ToInt32(Leitura[0]);
+                    c.DataC = Convert.ToDateTime(Leitura[1]);
+                    c.Produto = Leitura[2].ToString();
+                    c.Total = float.Parse(Leitura[3].ToString());
+                    dt.Rows.Add(c.Linha());
                 }
             }
             Conexao.Close();
             return dt;
         }
+
+        // Método para pesquisar compras com base no nome do produto
         public DataTable Pesquisar(string pesquisa)
         {
             DataTable dt = new DataTable();
@@ -78,17 +85,17 @@ namespace ControleEstroqueV._3.Dao
             string query = "";
             if (string.IsNullOrEmpty(pesquisa))
             {
-                query = "SELECT Id, Nome, Descricao, Quantidade,Preco FROM Produtos Order by Id desc";
+                query = "SELECT Id, Data, Produto, Quantidade, Subtotal FROM Compras ORDER BY Id DESC";
             }
             else
             {
-                query = "SELECT Id, Nome, Descricao, Quantidade,Preco FROM Produtos Where Nome like '%" + pesquisa + "%' Order by Id desc";
+                query = "SELECT Id, Data, Produto, Quantidade, Subtotal FROM Compras WHERE Produto LIKE '%" + pesquisa + "%' ORDER BY Id DESC";
             }
             MySqlCommand comando = new MySqlCommand(query, Conexao);
 
             MySqlDataReader Leitura = comando.ExecuteReader();
 
-            foreach (var atributos in typeof(ProdutoC).GetProperties())
+            foreach (var atributos in typeof(CompraC).GetProperties())
             {
                 dt.Columns.Add(atributos.Name);
             }
@@ -97,46 +104,46 @@ namespace ControleEstroqueV._3.Dao
             {
                 while (Leitura.Read())
                 {
-                    ProdutoC p = new ProdutoC();
-                    p.Id = Convert.ToInt32(Leitura[0]);
-                    p.Nome = Leitura[1].ToString();
-                    p.Descricao = Leitura[2].ToString();
-                    p.Preco = Leitura[3].ToString();
-                    dt.Rows.Add(p.Linha());
+                    CompraC c = new CompraC();
+                    c.Id = Convert.ToInt32(Leitura[0]);
+                    c.DataC = Convert.ToDateTime(Leitura[1]);
+                    c.Produto = Leitura[2].ToString();
+                    c.Total = float.Parse(Leitura[3].ToString());
+                    dt.Rows.Add(c.Linha());
                 }
             }
             Conexao.Close();
             return dt;
         }
-        public void Inserir(ProdutoC p)
+
+        // Método para inserir uma nova compra
+        public void Inserir(CompraC c)
         {
             try
             {
                 Conexao.Open();
-                string query = "INSERT INTO Produto (Nome, Descricao, Preco) VALUES (@nome, @descricao, @preco)";
+                string query = "INSERT INTO Compras (Data, Produto, Quantidade, Subtotal) VALUES (@data, @produto, @quantidade, @subtotal)";
                 MySqlCommand comando = new MySqlCommand(query, Conexao);
 
-                comando.Parameters.Add(new MySqlParameter("@nome", p.Nome));
-                comando.Parameters.Add(new MySqlParameter("@descricao", p.Descricao));
-                comando.Parameters.Add(new MySqlParameter("@preco", decimal.Parse(p.Preco)));
+                comando.Parameters.Add(new MySqlParameter("@data", c.DataC));
+                comando.Parameters.Add(new MySqlParameter("@produto", c.Produto));
+                comando.Parameters.Add(new MySqlParameter("@quantidade", c.Quantidade));
+                comando.Parameters.Add(new MySqlParameter("@subtotal", c.Total));
 
                 comando.ExecuteNonQuery();
 
-                // MessageBox.Show("Produto inserido com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Mensagem de sucesso (opcional)
+                // MessageBox.Show("Compra registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                // MessageBox.Show("Erro ao inserir produto: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Mensagem de erro (opcional)
+                // MessageBox.Show("Erro ao registrar compra: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 Conexao.Close();
             }
         }
-
-
-
-
-
     }
 }

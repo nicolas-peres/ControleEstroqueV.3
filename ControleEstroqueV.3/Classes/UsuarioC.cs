@@ -11,8 +11,9 @@ namespace ControleEstroqueV._3.Classes
 {
     public class UsuarioC
     {
-        private MySqlConnection Conexao = new MySqlConnection("Server=localhost;Database=projetocsharp;User Id=root;Password=");
+        private MySqlConnection Conexao = new MySqlConnection("Server=localhost;Database=controleestoque;User Id=root;Password=");
         public int Id { get; set; }
+        public string Nome { get; set; }
         public string Login { get; set; }
         public string Senha { get; set; }
         public bool Ativo { get; set; }
@@ -20,17 +21,19 @@ namespace ControleEstroqueV._3.Classes
         public void Inserir()
         {
             Conexao.Open();
-            string query = "Insert into Usuarios (Login , Senha, Ativo) " +
-                "               Values (@login, @senha, @ativo) ";
+            string query = "Insert into usuarios (Nome, Login , Senha, Ativo) " +
+                "               Values (@ nome, @login, @senha, @ativo) ";
             MySqlCommand comando = new MySqlCommand(query, Conexao);
 
-            MySqlParameter parametro1 = new MySqlParameter("@login", Login);
-            MySqlParameter parametro2 = new MySqlParameter("@senha", Senha);
-            MySqlParameter parametro3 = new MySqlParameter("@ativo", Ativo);
+            MySqlParameter parametro1 = new MySqlParameter("@nome", Nome);
+            MySqlParameter parametro2 = new MySqlParameter("@login", Login);
+            MySqlParameter parametro3 = new MySqlParameter("@senha", Senha);
+            MySqlParameter parametro4 = new MySqlParameter("@ativo", Ativo);
 
             comando.Parameters.Add(parametro1);
             comando.Parameters.Add(parametro2);
             comando.Parameters.Add(parametro3);
+            comando.Parameters.Add(parametro4);
             comando.ExecuteNonQuery();
             Conexao.Close();
         }
@@ -38,7 +41,7 @@ namespace ControleEstroqueV._3.Classes
         public DataTable PreencherGrid()
         {
             DataTable dataTable = new DataTable();
-            string query = "SELECT Id, Login, Ativo FROM Usuarios order by Id desc";
+            string query = "SELECT Id, Nome, Login, Ativo FROM usuarios order by Id desc";
             Conexao.Open();
             MySqlDataAdapter adapter = new MySqlDataAdapter(query, Conexao);
             try
@@ -60,11 +63,11 @@ namespace ControleEstroqueV._3.Classes
             string query = "";
             if (string.IsNullOrEmpty(pesquisa))
             {
-                query = "SELECT Id, Login, Ativo Nome FROM Usuarios order by Id desc";
+                query = "SELECT Id, Nome, Login, Ativo,  FROM usuarios order by Id desc";
             }
             else
             {
-                query = "SELECT Id, Login, Ativo Nome FROM Usuarios Where Login like '%" + pesquisa + "%' Order by Id desc";
+                query = "SELECT Id,Nome, Login, Ativo  FROM usuarios Where Login like '%" + pesquisa + "%' Order by Id desc";
             }
 
             MySqlDataAdapter adapter = new MySqlDataAdapter(query, Conexao);
@@ -82,9 +85,10 @@ namespace ControleEstroqueV._3.Classes
 
         public void Editar()
         {
-            string query = "update Usuarios set Login = @login, Senha = @senha, Ativo = @ativo WHERE  Id = @id";
+            string query = "update usuarios set Nome = @nome, Login = @login, Senha = @senha, Ativo = @ativo WHERE  Id = @id";
             Conexao.Open();
             MySqlCommand comando = new MySqlCommand(query, Conexao);
+            comando.Parameters.Add(new MySqlParameter("@nome", Nome));
             comando.Parameters.Add(new MySqlParameter("@login", Login));
             comando.Parameters.Add(new MySqlParameter("@senha", Senha));
             comando.Parameters.Add(new MySqlParameter("@ativo", Ativo));
@@ -101,7 +105,7 @@ namespace ControleEstroqueV._3.Classes
         }
         public void Excluir()
         {
-            string query = "Delete from Usuarios WHERE  Id = @id";
+            string query = "Delete from usuarios WHERE  Id = @id";
             Conexao.Open();
             MySqlCommand comando = new MySqlCommand(query, Conexao);
             comando.Parameters.Add(new MySqlParameter("@id", Id));
@@ -120,7 +124,7 @@ namespace ControleEstroqueV._3.Classes
         {
             DataTable dataTable = new DataTable();
             Conexao.Open();
-            string query = "SELECT Id, Login, Senha, Ativo Nome FROM Usuarios Where Id = @id Order by Id desc";
+            string query = "SELECT Id, Nome, Login, Senha, Ativo Nome FROM usuarios Where Id = @id Order by Id desc";
             MySqlCommand Comando = new MySqlCommand(query, Conexao);
             Comando.Parameters.AddWithValue("@id", id);
             MySqlDataReader resultado = Comando.ExecuteReader();

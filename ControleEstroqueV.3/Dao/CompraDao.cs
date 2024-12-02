@@ -12,7 +12,7 @@ namespace ControleEstroqueV._3.Dao
 {
     public class CompraDao
     {
-        private string LinhaConexao = "Server=localhost;Database=controleestoque;User Id=root;Password=";
+        private string LinhaConexao = "Server=localhost;Database=controleestoque;Uid=root;Password=;";
         private MySqlConnection Conexao;
 
         public CompraDao()
@@ -25,7 +25,7 @@ namespace ControleEstroqueV._3.Dao
         {
             DataTable dataTable = new DataTable();
 
-            string query = "SELECT Id, Nome FROM Produtos";
+            string query = "SELECT Id, Produto FROM compra";
 
             using (MySqlConnection connection = new MySqlConnection(LinhaConexao))
             {
@@ -51,7 +51,7 @@ namespace ControleEstroqueV._3.Dao
         {
             DataTable dt = new DataTable();
             Conexao.Open();
-            string query = "SELECT Id, Data, Produto, Quantidade, Subtotal FROM Compras ORDER BY Id DESC";
+            string query = "SELECT Id, DataC, Produto, Quantidade, Subtotal FROM compras ORDER BY Id DESC";
             MySqlCommand comando = new MySqlCommand(query, Conexao);
 
             MySqlDataReader Leitura = comando.ExecuteReader();
@@ -85,11 +85,11 @@ namespace ControleEstroqueV._3.Dao
             string query = "";
             if (string.IsNullOrEmpty(pesquisa))
             {
-                query = "SELECT Id, Data, Produto, Quantidade, Subtotal FROM Compras ORDER BY Id DESC";
+                query = "SELECT Id, DataC, Produto, Quantidade, Subtotal FROM compras ORDER BY Id DESC";
             }
             else
             {
-                query = "SELECT Id, Data, Produto, Quantidade, Subtotal FROM Compras WHERE Produto LIKE '%" + pesquisa + "%' ORDER BY Id DESC";
+                query = "SELECT Id, DataC, Produto, Quantidade, Subtotal FROM compras WHERE Produto LIKE '%" + pesquisa + "%' ORDER BY Id DESC";
             }
             MySqlCommand comando = new MySqlCommand(query, Conexao);
 
@@ -122,7 +122,7 @@ namespace ControleEstroqueV._3.Dao
             try
             {
                 Conexao.Open();
-                string query = "INSERT INTO Compras (Data, Produto, Quantidade, Subtotal) VALUES (@data, @produto, @quantidade, @subtotal)";
+                string query = "INSERT INTO compras (DataC, Produto, Quantidade, Subtotal) VALUES (@data, @produto, @quantidade, @subtotal)";
                 MySqlCommand comando = new MySqlCommand(query, Conexao);
 
                 comando.Parameters.Add(new MySqlParameter("@data", c.DataC));

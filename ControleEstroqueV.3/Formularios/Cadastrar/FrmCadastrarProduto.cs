@@ -35,7 +35,7 @@ namespace ControleEstroqueV._3.Formularios
         private void btnSalvar_Click(object sender, EventArgs e)
         {
             ProdutoC p = new ProdutoC();
-            p.Id = Convert.ToInt32(numId);
+            p.Id = Convert.ToInt32(numId.Value);
             p.Nome = comboNome.Text;
             p.Descricao = txtDescricao.Text;
             p.Preco = txtPreco.Text;
@@ -53,6 +53,11 @@ namespace ControleEstroqueV._3.Formularios
             comboNome.Text = "";
             numQtd.Value = 0;
             numId.Value = 0;
+        }
+
+        private void comboNome_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

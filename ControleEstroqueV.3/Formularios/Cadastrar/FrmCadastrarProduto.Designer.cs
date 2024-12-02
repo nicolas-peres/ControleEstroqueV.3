@@ -113,6 +113,7 @@
             this.comboNome.Name = "comboNome";
             this.comboNome.Size = new System.Drawing.Size(121, 21);
             this.comboNome.TabIndex = 23;
+            this.comboNome.SelectedIndexChanged += new System.EventHandler(this.comboNome_SelectedIndexChanged);
             // 
             // txtPreco
             // 

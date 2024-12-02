@@ -11,7 +11,7 @@ namespace ControleEstroqueV._3.Dao
 {
     public class ProdutoDao
     {
-        private string LinhaConexao = "Server=localhost;Database=controleestoque;User Id=root;Password=";
+        private string LinhaConexao = "Server=localhost;Database=controleestoque;Uid=root;Password=;";
         private MySqlConnection Conexao;
         public ProdutoDao()
         {
@@ -22,7 +22,7 @@ namespace ControleEstroqueV._3.Dao
         {
             DataTable dataTable = new DataTable();
 
-            string query = "SELECT Id, Nome FROM Produto";
+            string query = "SELECT Id, Nome FROM produto";
 
             using (MySqlConnection connection = new MySqlConnection(LinhaConexao))
             {
@@ -78,11 +78,11 @@ namespace ControleEstroqueV._3.Dao
             string query = "";
             if (string.IsNullOrEmpty(pesquisa))
             {
-                query = "SELECT Id, Nome, Descricao, Quantidade,Preco FROM Produtos Order by Id desc";
+                query = "SELECT Id, Nome, Descricao, Quantidade,Preco FROM produtos Order by Id desc";
             }
             else
             {
-                query = "SELECT Id, Nome, Descricao, Quantidade,Preco FROM Produtos Where Nome like '%" + pesquisa + "%' Order by Id desc";
+                query = "SELECT Id, Nome, Descricao, Quantidade,Preco FROM produtos Where Nome like '%" + pesquisa + "%' Order by Id desc";
             }
             MySqlCommand comando = new MySqlCommand(query, Conexao);
 
@@ -113,7 +113,7 @@ namespace ControleEstroqueV._3.Dao
             try
             {
                 Conexao.Open();
-                string query = "INSERT INTO Produto (Nome, Descricao, Preco) VALUES (@nome, @descricao, @preco)";
+                string query = "INSERT INTO produto (Nome, Descricao, Preco) VALUES (@nome, @descricao, @preco)";
                 MySqlCommand comando = new MySqlCommand(query, Conexao);
 
                 comando.Parameters.Add(new MySqlParameter("@nome", p.Nome));
